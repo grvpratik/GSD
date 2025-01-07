@@ -48,6 +48,6 @@ read -p "Enter your commit message: " message
 emoji=${emoji_map[$type_key]}
 
 git add .
-git commit -m "$emoji $type_key: $message"
+git commit -m "$type_key $emoji: $message"
 
 echo "Committed with $emoji $type_key: $message"

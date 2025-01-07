@@ -11,6 +11,9 @@
     "types": [
         "@cloudflare/workers-types/2023-07-01"
     ],
+     "paths": {
+      "shared": ["../../packages/shared/src"]
+    },
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx"
   },
