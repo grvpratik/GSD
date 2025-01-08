@@ -55,7 +55,10 @@ export default {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
-  		}
+		  },
+		  boxShadow: {
+			  'button': 'inset 0px -1px 0px 0px rgba(0,0,0,0.08), 0px 1px 1.5px -1px rgba(0,0,0,0.04), 0px 1px 3px 0px rgba(0,0,0,0.02), inset 0 0 0 1px #d8dada'
+		  }
   	}
   },
   plugins: [require("tailwindcss-animate")],
