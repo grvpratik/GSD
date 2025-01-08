@@ -49,5 +49,7 @@ emoji=${emoji_map[$type_key]}
 
 git add .
 git commit -m "$type_key $emoji: $message"
+git push
 
-echo "Committed with $emoji $type_key: $message"
+
+echo "Committed with $type_key $emoji: $message"
