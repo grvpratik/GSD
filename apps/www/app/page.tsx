@@ -1,11 +1,10 @@
-import Image from "next/image";
-import { Button } from "www/components/ui/button";
+import AiSearch from "www/components/section/landing-search";
 
 export default function Home() {
   return (
 
     <>
-    home
+    <AiSearch />
     </>
   );
 }
