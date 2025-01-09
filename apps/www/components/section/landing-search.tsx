@@ -1,11 +1,19 @@
 "use client";
 
-import { Brain, ChevronDown, Globe, Lightbulb,  Send, Sparkles } from "lucide-react";
+import {
+    Brain,
+    ChevronDown,
+    Globe,
+    Lightbulb,
+    Send,
+    Sparkles
+} from "lucide-react";
 import { useRef, useState } from "react";
 import { Textarea } from "www/components/ui/textarea";
 import { cn } from "www/lib/utils";
 import { useAutoResizeTextarea } from "www/hooks/use-auto-resize-textarea";
 import { useClickOutside } from "www/hooks/use-click-outside";
+import { Button } from "www/components/ui/button";
 
 const MIN_HEIGHT = 48;
 const MAX_HEIGHT = 164;
@@ -69,9 +77,9 @@ export default function AiSearch() {
     };
 
     return (
-        <div className="w-full py-4">
+        <div className="w-full py-4 px-4">
             <div className="relative max-w-xl w-full mx-auto">
-                <div className="relative flex flex-col">
+                <div className="relative flex flex-col shadow-sm  rounded-xl">
                     <div
                         className="overflow-y-auto"
                         style={{ maxHeight: `${MAX_HEIGHT}px` }}
@@ -90,7 +98,7 @@ export default function AiSearch() {
                         />
                     </div>
 
-                    <div className="h-12 bg-black/5 dark:bg-white/5 rounded-b-xl">
+                    <div className="h-12 bg-black/5 dark:bg-white/5 rounded-b-xl ">
                         <div className="absolute left-3 bottom-3 flex items-center gap-2">
                             {/* Agent Selection */}
                             <div className="rounded-xl bg-black/5 dark:bg-white/5">
@@ -105,7 +113,7 @@ export default function AiSearch() {
                                         }
                                         className="flex items-center p-1.5 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg"
                                     >
-                                        <Lightbulb className="size-5 dark:text-white" />
+                                        <Lightbulb className="size-5  dark:text-white" />
                                     </button>
 
                                     <div className="absolute -bottom-8 left-0 text-nowrap flex items-center gap-1.5 text-[10px] text-muted-foreground dark:text-white/50">
@@ -146,7 +154,8 @@ export default function AiSearch() {
 
                             {/* Model Selection */}
                             <div className="relative">
-                                <button
+                                <Button
+                                    variant={'outline'}
                                     type="button"
                                     onClick={() =>
                                         updateState({
@@ -154,19 +163,19 @@ export default function AiSearch() {
                                             isAgentMenuOpen: false,
                                         })
                                     }
-                                    className="flex items-center gap-1.5 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg px-2 py-1"
+                                    className="flex items-center gap-1.5 h-8 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg px-2 "
                                 >
                                     <Brain className="w-4 h-4 dark:text-white" />
-                                    <span className="dark:text-white">
+                                    <span className="dark:text-white text-center">
                                         {state.selectedModel}
                                     </span>
                                     <ChevronDown className="w-3 h-3 ml-0.5 dark:text-white" />
-                                </button>
+                                </Button>
 
                                 {state.isModelMenuOpen && (
                                     <div
                                         ref={modelMenuRef}
-                                        className="absolute top-full left-0 mt-1 w-64 bg-white dark:bg-zinc-800 rounded-md shadow-lg py-1 z-50 border border-black/10 dark:border-white/10"
+                                        className="absolute  top-full left-0 mt-1 w-64 bg-white dark:bg-zinc-800 rounded-md shadow-lg py-1 z-50 border border-black/10 dark:border-white/10"
                                     >
                                         {AI_MODELS.map((model) => (
                                             <button
