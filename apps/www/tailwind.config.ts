@@ -9,12 +9,13 @@ export default {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-	  extend: {
-		  fontFamily: {
-			  sans: ["var(--font-geist-sans)", ...fontFamily.sans],
-
-		  },
-				
+  	extend: {
+  		fontFamily: {
+  			sans: [
+  				'var(--font-geist-sans)',
+                    ...fontFamily.sans
+                ]
+  		},
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
@@ -55,16 +56,26 @@ export default {
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
+  			},
+  			sidebar: {
+  				DEFAULT: 'hsl(var(--sidebar-background))',
+  				foreground: 'hsl(var(--sidebar-foreground))',
+  				primary: 'hsl(var(--sidebar-primary))',
+  				'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
+  				accent: 'hsl(var(--sidebar-accent))',
+  				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
+  				border: 'hsl(var(--sidebar-border))',
+  				ring: 'hsl(var(--sidebar-ring))'
   			}
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
-		  },
-		  boxShadow: {
-			  'button': 'inset 0px -1px 0px 0px rgba(0,0,0,0.08), 0px 1px 1.5px -1px rgba(0,0,0,0.04), 0px 1px 3px 0px rgba(0,0,0,0.02), inset 0 0 0 1px #d8dada'
-		  }
+  		},
+  		boxShadow: {
+  			button: 'inset 0px -1px 0px 0px rgba(0,0,0,0.08), 0px 1px 1.5px -1px rgba(0,0,0,0.04), 0px 1px 3px 0px rgba(0,0,0,0.02), inset 0 0 0 1px #d8dada'
+  		}
   	}
   },
   plugins: [require("tailwindcss-animate")],

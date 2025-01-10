@@ -1,6 +1,6 @@
-import Footer from "www/components/section/footer";
-import AiSearch from "www/components/section/landing-search";
-import Nav from "www/components/section/nav";
+import Footer from "www/components/section/landing/footer";
+import AiSearch from "www/components/section/landing/landing-search";
+import Nav from "www/components/section/landing/nav";
 
 export default function Home() {
   return (

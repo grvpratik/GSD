@@ -3,6 +3,7 @@ import { Hono } from 'hono'
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 import { prettyJSON } from 'hono/pretty-json';
+import { geminiEvaluation } from './routes/gemini';
 
 
 const app = new Hono<{ Bindings: CloudflareBindings }>()
@@ -14,6 +15,16 @@ app.use('*', cors());
 app.get('/', (c) => {
   return c.json({ status: 'ok', message: 'Server is running' });
 });
+
+
+app.post("/ai/search", geminiEvaluation)
+
+
+
+
+
+
+
 app.onError((err, c) => {
   console.error(`${err}`);
   return c.json({

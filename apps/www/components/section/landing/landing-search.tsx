@@ -5,6 +5,7 @@ import {
     ChevronDown,
     Globe,
     Lightbulb,
+    LoaderCircle,
     Send,
     Sparkles
 } from "lucide-react";
@@ -14,6 +15,8 @@ import { cn } from "www/lib/utils";
 import { useAutoResizeTextarea } from "www/hooks/use-auto-resize-textarea";
 import { useClickOutside } from "www/hooks/use-click-outside";
 import { Button } from "www/components/ui/button";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const MIN_HEIGHT = 48;
 const MAX_HEIGHT = 164;
@@ -43,16 +46,43 @@ export default function AiSearch() {
         minHeight: MIN_HEIGHT,
         maxHeight: MAX_HEIGHT,
     });
-
-    const handleSubmit = () => {
+const router = useRouter();
+    const handleSubmit = async() => {
         if (!state.value) return;
+        console.log(state, 'state')
         const input = {
             value: state.value,
             agent: state.selectedAgent,
             model: state.selectedModel,
         }
-        alert(JSON.stringify(input, null, 2));
-        adjustHeight(true);
+        // alert(JSON.stringify(input, null, 2));
+        setLoading(true);
+        // setError(null);
+        try {
+            const response = await axios.post('http://localhost:8787/ai/search', input, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+
+            });
+            console.log(response, 'response')
+            if (response.status !== 200) {
+                alert('Error');
+                return
+            };
+
+            const result = await response.data;
+            console.log(result, 'result')
+            router.push('/uuid/evaluation')
+        } catch (err: any) {
+            // setError(err.message);
+        } finally {
+            setLoading(false);
+            adjustHeight(true)
+        }
+
+        ;
+
     };
 
     const agentMenuRef = useRef<HTMLDivElement>(null);
@@ -204,18 +234,28 @@ export default function AiSearch() {
                         </div>
 
                         <div className="absolute right-3 bottom-3">
-                            <button
+                            <Button
+                                variant="outline" size="icon" aria-label="generate"
                                 type="button"
                                 onClick={handleSubmit}
+                                disabled={loading}
+                                data-loading={loading}
+
                                 className={cn(
-                                    "rounded-lg p-2 transition-colors",
+                                    "rounded-lg p-2 size-8 disabled:text-sky-500 disabled:cursor-not-allowed  hover:text-sky-500 hover:bg-sky-500/15 disabled:bg-sky-500/15 transition-colors",
                                     state.value
                                         ? "bg-sky-500/15 text-sky-500"
                                         : "bg-black/5 dark:bg-white/5 text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white"
                                 )}
                             >
-                                <Sparkles className="opacity-60 " size={16} strokeWidth={2} aria-hidden="true" />
-                            </button>
+                            
+                                {loading ? (
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                        <LoaderCircle className="animate-spin" size={16} strokeWidth={2} aria-hidden="true" />
+                                    </div>
+                                ) : <Sparkles className="opacity-60 " size={16} strokeWidth={2} aria-hidden="true" />}
+                           
+                            </Button>
                         </div>
                     </div>
                 </div>
