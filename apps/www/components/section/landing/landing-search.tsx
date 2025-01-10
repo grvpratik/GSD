@@ -73,7 +73,7 @@ const router = useRouter();
 
             const result = await response.data;
             console.log(result, 'result')
-            router.push('/uuid/evaluation')
+            router.push('/build/id')
         } catch (err: any) {
             // setError(err.message);
         } finally {

@@ -10,7 +10,7 @@ export default function AiLayout({ children }: { children: React.ReactNode }) {
             <main className=" w-full h-screen flex flex-col  font-sans ">
                 <Nav />
                 {children}
-                <Footer/>
+                {/* <Footer/> */}
             </main>
         </SidebarProvider>
     )
