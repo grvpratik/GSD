@@ -61,7 +61,7 @@ export function AppSidebar() {
                             <div className="flex py-2 aspect-square size-5 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground">
                                 <UserIcon className="size-3" />
                             </div>
-                            <span className="truncate font-semibold">Company</span>
+                            <span className="truncate font-semibold">BuildAi</span>
                         </div>
                     </SidebarMenuItem>
                 </SidebarMenu>
