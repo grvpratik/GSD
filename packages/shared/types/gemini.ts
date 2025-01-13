@@ -118,3 +118,20 @@ export interface IdeaAnalysis {
       
     };
 }
+export interface ScheduleCalander{
+    category: string;
+    start_date: Date;
+    end_date: Date;
+    tasks: Array<{
+        id: string;
+        title: string;
+        completed: boolean;
+        priority: 'low' | 'medium' | 'high';
+    }>
+}
+
+export interface IdeaInput {
+    value: string;
+    model: string;
+    type: 'personal'| 'buissness' ;
+}
