@@ -1,25 +1,14 @@
 import React, { useState } from "react";
+
 import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragOverlay,
-} from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
+ 
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Plus, GripVertical, Trash2 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "www/components/ui/card";
 import { Button } from "www/components/ui/button";
-import { Input } from "www/components/ui/input";
+
 import { Badge } from "www/components/ui/badge";
 // import {
 //   Select,
@@ -62,7 +51,7 @@ interface Task {
     work: "bg-purple-500/10 text-purple-500",
     personal: "bg-green-500/10 text-green-500",
   };
-
+console.log(showDeleteDialog, "showDeleteDialog")
   return (
     <>
       <div className="relative">
