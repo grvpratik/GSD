@@ -69,7 +69,6 @@ const menuItems: MenuItem[] = [
 		url: "/build/id/calendar",
 		icon: MessageSquare,
 	},
-	
 ];
 
 const MemoizedSidebarItem = memo(({ item }: { item: MenuItem }) => (
@@ -96,7 +95,7 @@ export function AppSidebar({ user }: AppSidebarProps) {
 	);
 
 	return (
-		<Sidebar className="rounded-xl border-2 overflow-hidden">
+		<Sidebar className="rounded-xl border-3 overflow-hidden mx-2 font-sans">
 			<SidebarHeader>
 				<SidebarMenu>
 					<SidebarMenuItem>

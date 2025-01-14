@@ -116,7 +116,7 @@ export default function AiSearch() {
 							id="ai-input-04"
 							value={state.value}
 							placeholder="Search the web..."
-							className="w-full font-sans rounded-xl rounded-b-none px-4 py-3 bg-black/5 dark:bg-white/5 border-none dark:text-white placeholder:text-black/70 dark:placeholder:text-white/70 resize-none focus-visible:ring-0 leading-[1.2]"
+							className="w-full  rounded-xl rounded-b-none px-4 py-3 bg-black/5 dark:bg-white/5 border-none dark:text-white placeholder:text-black/70 dark:placeholder:text-white/70 resize-none focus-visible:ring-0 leading-[1.2]"
 							ref={textareaRef}
 							onKeyDown={handleKeyDown}
 							onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
