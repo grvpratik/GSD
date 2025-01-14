@@ -1,5 +1,5 @@
 import React from "react";
-import ScheduleCalendar from "www/components/section/schedule/schedule-cal";
+import ScheduleCalendar from "www/components/section/schedule/ScheduleCal";
 
 const Calendar = async ({ params }: { params: { id: string } }) => {
 	const { id } = await params;

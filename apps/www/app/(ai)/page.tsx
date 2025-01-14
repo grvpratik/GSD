@@ -1,5 +1,5 @@
 
-import AiSearch from "www/components/section/landing/landing-search";
+import AiSearch from "www/components/section/landing/LandingSearch";
 
 
 export default function Home() {

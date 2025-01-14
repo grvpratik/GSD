@@ -1,24 +1,19 @@
 "use client";
 import React from "react";
 import { Calendar } from "www/components/ui/calendar";
-import {
-	Card,
-	CardHeader,
-	CardTitle,
-	CardContent,
-} from "www/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "www/components/ui/card";
 import { Badge } from "www/components/ui/badge";
-import TaskList from "./task-list";
+import TaskList from "./TaskList";
 
 export type Task = {
 	id: string;
 	text: string;
 	completed: boolean;
-	category: string;
+	category: "home" | "work" | "personal";
 	date: Date;
 };
 
-const categoryColors = {
+const categoryColors: Record<Task["category"], string> = {
 	home: "bg-blue-500/10 text-blue-500",
 	work: "bg-purple-500/10 text-purple-500",
 	personal: "bg-green-500/10 text-green-500",
@@ -68,7 +63,7 @@ const ScheduleCalendar = () => {
 		setTasks(newTasks);
 	};
 
-	const addTask = (text: string, category: string) => {
+	const addTask = (text: string, category: Task["category"]) => {
 		if (!date) return;
 		setTasks([
 			...tasks,
@@ -86,12 +81,10 @@ const ScheduleCalendar = () => {
 		setTasks(tasks.filter((task: Task) => task.id !== taskId));
 	};
 
-	// Filter tasks for selected date
 	const selectedDateTasks = tasks.filter(
 		(task) => date && task.date.toDateString() === date.toDateString()
 	);
 
-	// Get incomplete tasks from previous dates
 	const incompleteTasks = tasks.filter(
 		(task) =>
 			!task.completed &&
@@ -133,11 +126,12 @@ const ScheduleCalendar = () => {
 				</CardHeader>
 				<CardContent>
 					<div className="space-y-2 max-h-[calc(100vh-12rem)] overflow-y-auto pr-2">
-						{incompleteTasks.length === 0 ?
+						{incompleteTasks.length === 0 ? (
 							<div className="text-center text-muted-foreground py-8">
 								No overdue tasks
 							</div>
-						:	incompleteTasks.map((task) => (
+						) : (
+							incompleteTasks.map((task) => (
 								<div
 									key={task.id}
 									className="flex items-center gap-3 bg-card hover:bg-accent/50 rounded-lg p-3 border border-border transition-colors"
@@ -150,7 +144,7 @@ const ScheduleCalendar = () => {
 										<div className="text-foreground">{task.text}</div>
 										<div className="flex items-center gap-2 mt-1">
 											<Badge
-												className={`${categoryColors[task.category as keyof typeof categoryColors]} font-medium`}
+												className={`${categoryColors[task.category]} font-medium`}
 											>
 												{task.category}
 											</Badge>
@@ -161,7 +155,7 @@ const ScheduleCalendar = () => {
 									</div>
 								</div>
 							))
-						}
+						)}
 					</div>
 				</CardContent>
 			</Card>

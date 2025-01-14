@@ -1,41 +1,23 @@
 import React, { useState } from "react";
-
-import {
- 
-  useSortable,
-} from "@dnd-kit/sortable";
+import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Plus, GripVertical, Trash2 } from "lucide-react";
-import { Card, CardHeader, CardTitle, CardContent } from "www/components/ui/card";
+import { GripVertical, Trash2 } from "lucide-react";
 import { Button } from "www/components/ui/button";
-
 import { Badge } from "www/components/ui/badge";
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select";
-// import {
-//   AlertDialog,
-//   AlertDialogAction,
-//   AlertDialogCancel,
-//   AlertDialogContent,
-//   AlertDialogDescription,
-//   AlertDialogFooter,
-//   AlertDialogHeader,
-//   AlertDialogTitle,
-// } from "www/components/ui/alert-dialog";
 
 interface Task {
   id: string;
   text: string;
-  category: string;
+  category: "home" | "work" | "personal";
 }
 
-// SortableTask Component
- const SortableTask = ({ task, onDelete }: { task: Task; onDelete: (id: string) => void }) => {
+const categoryColors: Record<Task["category"], string> = {
+  home: "bg-blue-500/10 text-blue-500",
+  work: "bg-purple-500/10 text-purple-500",
+  personal: "bg-green-500/10 text-green-500",
+};
+
+const SortableTask = ({ task, onDelete }: { task: Task; onDelete: (id: string) => void }) => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
     id: task.id,
@@ -46,12 +28,6 @@ interface Task {
     transition,
   };
 
-  const categoryColors = {
-    home: "bg-blue-500/10 text-blue-500",
-    work: "bg-purple-500/10 text-purple-500",
-    personal: "bg-green-500/10 text-green-500",
-  };
-console.log(showDeleteDialog, "showDeleteDialog")
   return (
     <>
       <div className="relative">
@@ -69,7 +45,7 @@ console.log(showDeleteDialog, "showDeleteDialog")
           />
           <div className="flex-1 flex items-center gap-2">
             <span className="text-foreground">{task.text}</span>
-            <Badge className={`${categoryColors[task.category as keyof typeof categoryColors]} font-medium`}>
+            <Badge className={`${categoryColors[task.category]} font-medium`}>
               {task.category}
             </Badge>
           </div>
@@ -83,7 +59,7 @@ console.log(showDeleteDialog, "showDeleteDialog")
           </Button>
         </div>
       </div>
-{/* 
+      {/* 
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -102,8 +78,10 @@ console.log(showDeleteDialog, "showDeleteDialog")
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
-      </AlertDialog> */}
+      </AlertDialog> 
+      */}
     </>
   );
 };
+
 export default SortableTask;

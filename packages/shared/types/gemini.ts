@@ -1,6 +1,7 @@
 export interface IdeaAnalysis {
     metadata: {
         id: string;
+        title:string;
         timestamp: string;
         version: string;
     };
@@ -135,3 +136,4 @@ export interface IdeaInput {
     model: string;
     type: 'personal'| 'buissness' ;
 }
+
