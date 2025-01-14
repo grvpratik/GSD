@@ -202,6 +202,7 @@ export const MainResponse = [
 				],
 			},
 		},
+
 		schedule: {
 			core: {
 				start_date: new Date("2022-01-01"),
@@ -222,7 +223,7 @@ export const MainResponse = [
 						priority: "medium",
 					},
 				
-				]
+				]//atleast
 			},//core fratures implementation
 			features: {},//,mvp development 
 

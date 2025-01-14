@@ -8,7 +8,7 @@ const data = {
 	user: {
 		name: "pratik",
 		email: "pratikgaurav37@gmail.com",
-		avatar: "/pratikgrv.jpg",
+		avatar: "/profile/pratikgrv.jpg",
 	},
 };
 export default function AiLayout({ children }: { children: React.ReactNode }) {
