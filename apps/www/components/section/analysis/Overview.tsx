@@ -1,7 +1,6 @@
 import React from 'react'
 import { OverviewBarChart } from 'www/components/RadarChart'
 
-
 interface OverviewAnalysisProps {
     feasibility: {
         score: number,

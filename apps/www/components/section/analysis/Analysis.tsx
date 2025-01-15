@@ -45,7 +45,8 @@ const tabs: TabsType[] = [
 	},
 ];
 
-const Analysis = () => {
+const Analysis = ({res}) => {
+	console.log(res,"res")
 	const [activeTab, setActiveTab] = useState<TabValue>(
 		tabs[0].value as TabValue
 	);

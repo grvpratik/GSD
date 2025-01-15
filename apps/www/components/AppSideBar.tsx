@@ -16,6 +16,7 @@ import {
 import SideBarSearch from "./ui/search";
 import { NavUser } from "./NavUser";
 
+import MainResponse from "shared/db/temp";
 interface MenuItem {
 	title: string;
 	url: string;
@@ -30,52 +31,16 @@ interface User {
 
 interface AppSidebarProps {
 	user: User;
+	history:any
 }
 
-const menuItems: MenuItem[] = [
-	{
-		title: "Logo Generator",
-		url: "/logo-generator",
-		icon: MessageSquare,
-	},
 
-	{
-		title: "saas generator",
-		url: "/build/id/calendar",
-		icon: MessageSquare,
-	},
-	{
-		title: "ai writer",
-		url: "/build/id/calendar",
-		icon: MessageSquare,
-	},
-	{
-		title: "face generator",
-		url: "/build/id/calendar",
-		icon: MessageSquare,
-	},
-	{
-		title: "voice cloner",
-		url: "/build/id/calendar",
-		icon: MessageSquare,
-	},
-	{
-		title: "Ai agent",
-		url: "/build/id/calendar",
-		icon: MessageSquare,
-	},
-	{
-		title: "logo generator  ",
-		url: "/build/id/calendar",
-		icon: MessageSquare,
-	},
-];
 
 const MemoizedSidebarItem = memo(({ item }: { item: MenuItem }) => (
 	<SidebarMenuItem key={item.title}>
 		<SidebarMenuButton asChild>
 			<a href={item.url} className="flex items-center gap-2">
-				<item.icon className="h-4 w-4" />
+				<MessageSquare className="h-4 w-4" />
 				<span className="truncate">{item.title}</span>
 			</a>
 		</SidebarMenuButton>
@@ -83,17 +48,17 @@ const MemoizedSidebarItem = memo(({ item }: { item: MenuItem }) => (
 ));
 MemoizedSidebarItem.displayName = "MemoizedSidebarItem";
 
-export function AppSidebar({ user }: AppSidebarProps) {
+export function AppSidebar({ user,history }: AppSidebarProps) {
 	const [searchQuery, setSearchQuery] = useState("");
-
+	
 	const filteredItems = useMemo(
 		() =>
-			menuItems.filter((item) =>
+			history.filter((item) =>
 				item.title.toLowerCase().includes(searchQuery.toLowerCase())
 			),
 		[searchQuery]
 	);
-
+	
 	return (
 		<Sidebar className="rounded-xl border-3 overflow-hidden mx-2 font-sans">
 			<SidebarHeader>
