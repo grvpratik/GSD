@@ -106,12 +106,12 @@ const ScheduleCalendar = () => {
 				</CardContent>
 			</Card>
 
-			<TaskList
+			{/* <TaskList
 				tasks={selectedDateTasks}
 				onTasksReorder={handleTasksReorder}
 				onAddTask={addTask}
 				onDeleteTask={deleteTask}
-			/>
+			/> */}
 
 			<Card className="bg-background">
 				<CardHeader>

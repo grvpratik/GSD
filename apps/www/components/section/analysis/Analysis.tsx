@@ -24,12 +24,15 @@ type TabsType = {
 	icon: any;
 	content: JSX.Element;
 };
+
+
+const Analysis = ({res}) => {
 const tabs: TabsType[] = [
 	{
 		value: "Overview",
 		label: "Overview",
 		icon: Calendar,
-		content: <OverviewAnalysis />,
+		content: <OverviewAnalysis data={res.analysis}/>,
 	},
 	{
 		value: "Features",
@@ -43,10 +46,7 @@ const tabs: TabsType[] = [
 		icon: Store,
 		content: <MarketAnalysis />,
 	},
-];
-
-const Analysis = ({res}) => {
-	console.log(res,"res")
+];	
 	const [activeTab, setActiveTab] = useState<TabValue>(
 		tabs[0].value as TabValue
 	);
