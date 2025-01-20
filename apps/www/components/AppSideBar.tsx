@@ -17,10 +17,11 @@ import SideBarSearch from "./ui/search";
 import { NavUser } from "./NavUser";
 
 import MainResponse from "shared/db/temp";
+import { SearchHistory } from "www/app/(ai)/layout";
 interface MenuItem {
 	title: string;
 	url: string;
-	icon: LucideIcon;
+	icon?: LucideIcon;
 }
 
 interface User {
@@ -31,15 +32,15 @@ interface User {
 
 interface AppSidebarProps {
 	user: User;
-	history:any
+	history:SearchHistory[];
 }
 
 
 
 const MemoizedSidebarItem = memo(({ item }: { item: MenuItem }) => (
-	<SidebarMenuItem key={item.title}>
+	<SidebarMenuItem key={item.title} className=" rounded-lg ">
 		<SidebarMenuButton asChild>
-			<a href={item.url} className="flex items-center gap-2">
+			<a href={item.url} className="flex items-center gap-2 p-1">
 				<MessageSquare className="h-4 w-4" />
 				<span className="truncate">{item.title}</span>
 			</a>
@@ -60,7 +61,7 @@ export function AppSidebar({ user,history }: AppSidebarProps) {
 	);
 	
 	return (
-		<Sidebar className="rounded-xl border-3 overflow-hidden mx-2 font-sans">
+		<Sidebar  variant="floating" className=" overflow-hidden font-sans ">
 			<SidebarHeader>
 				<SidebarMenu>
 					<SidebarMenuItem>
@@ -94,6 +95,7 @@ export function AppSidebar({ user,history }: AppSidebarProps) {
 						</SidebarMenu>
 					</SidebarGroupContent>
 				</SidebarGroup>
+				
 			</SidebarContent>
 
 			<NavUser user={user} />

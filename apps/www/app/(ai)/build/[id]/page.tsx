@@ -1,5 +1,5 @@
 import React from "react";
-import Analysis from "www/components/section/analysis/Analysis";
+import Analysis from "www/components/section/analysis/AnalysisSection";
 import { response } from "www/app/(ai)/layout";
 
 const BuildPage = ({ params }: { params: { id: string } }) => {

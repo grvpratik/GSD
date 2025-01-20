@@ -2,7 +2,11 @@ import { SidebarProvider, SidebarTrigger } from "www/components/ui/sidebar";
 import { AppSidebar } from "www/components/AppSideBar";
 import Nav from "www/components/section/landing/Nav";
 import MainResponse from "shared/db/temp";
-
+export interface SearchHistory {
+	id: any;
+	title: string;
+	url: string;
+}
 const data = {
 	user: {
 		name: "pratik",
@@ -10,18 +14,18 @@ const data = {
 		avatar: "/profile/pratikgrv.jpg",
 	},
 };
-const history= MainResponse.map((data)=>{
+const history: SearchHistory[] = MainResponse.map((data) => {
 	return {
-		id:data.id,
-		title:data.title,
-       url:`/build/${data.id}`
-	}
+		id: data.id,
+		title: data.title,
+		url: `/build/${data.id}`,
+	};
 });
-export const response=MainResponse;
+export const response = MainResponse;
 export default function AiLayout({ children }: { children: React.ReactNode }) {
 	return (
-		<SidebarProvider>
-			<AppSidebar user={data.user}  history={history}/>
+		<SidebarProvider >
+			<AppSidebar user={data.user} history={history} />
 			<main className=" w-full h-screen flex flex-col  font-sans ">
 				<Nav />
 				{children}

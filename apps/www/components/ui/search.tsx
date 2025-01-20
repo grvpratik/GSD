@@ -13,10 +13,10 @@ export default function SideBarSearch({ onSearchChange, value }: SearchProps) {
 
 	return (
 		<div className="space-y-2 mx-1">
-			<div className="relative">
+			<div className="relative ">
 				<Input
 					id={id}
-					className="peer ps-9 text-sm"
+					className="peer ps-9 text-sm rounded-xl overflow-hidden"
 					placeholder="Search..."
 					type="search"
 					value={value}
