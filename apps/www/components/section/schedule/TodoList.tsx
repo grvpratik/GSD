@@ -6,7 +6,7 @@ import {
 	CardContent,
 } from "www/components/ui/card";
 import { Badge } from "www/components/ui/badge";
-import type { Task } from "../../../types";
+import type { Task } from "www/types";
 
 interface TodoListProps {
 	tasks: Task[] | [];
@@ -38,6 +38,7 @@ const TodoList: React.FC<TodoListProps> = ({ tasks, date }) => {
 									type="checkbox"
 									checked={task.completed}
 									onChange={() => {
+										
 										/* Add toggle completion logic */
 									}}
 									className="w-4 h-4 rounded-full border-2 border-primary/50 checked:bg-primary checked:border-transparent focus:ring-0 focus:ring-offset-0"

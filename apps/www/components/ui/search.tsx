@@ -16,7 +16,7 @@ export default function SideBarSearch({ onSearchChange, value }: SearchProps) {
 			<div className="relative ">
 				<Input
 					id={id}
-					className="peer ps-9 text-sm rounded-xl overflow-hidden"
+					className="peer ps-9 text-sm rounded-xl overflow-hidden  shadow-border border-none    focus:shadow-border"
 					placeholder="Search..."
 					type="search"
 					value={value}

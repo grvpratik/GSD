@@ -106,8 +106,8 @@ export default function AiSearch() {
 
 	return (
 		<div className="w-full py-4 px-4">
-			<div className="relative max-w-xl w-full mx-auto">
-				<div className="relative flex flex-col shadow-sm  rounded-xl">
+			<div className="relative max-w-xl w-full mx-auto ">
+				<div className="relative flex flex-col shadow-border rounded-xl">
 					<div
 						className="overflow-y-auto"
 						style={{ maxHeight: `${MAX_HEIGHT}px` }}
