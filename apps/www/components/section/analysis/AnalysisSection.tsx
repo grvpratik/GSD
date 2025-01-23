@@ -13,46 +13,44 @@ import FeaturesAnalysis from "./Features";
 import MarketAnalysis from "./Market";
 
 enum AnalysisTabs {
-	Overview,
-	Features,
-	Market,
+	Overview = "Overview",
+	Features = "Features",
+	Market = "Market",
 }
-type TabValue = "Overview" | "Features" | "Market";
 type TabsType = {
-	value: string;
-	label: TabValue;
+	value: AnalysisTabs;
+	label: AnalysisTabs;
 	icon: any;
 	content: JSX.Element;
 };
 
-
-const Analysis = ({res}) => {
-const tabs: TabsType[] = [
-	{
-		value: "Overview",
-		label: "Overview",
-		icon: Calendar,
-		content: <OverviewAnalysis data={res.analysis}/>,
-	},
-	{
-		value: "Features",
-		label: "Features",
-		icon: Feather,
-		content: <FeaturesAnalysis />,
-	},
-	{
-		value: "Market",
-		label: "Market",
-		icon: Store,
-		content: <MarketAnalysis />,
-	},
-];	
-	const [activeTab, setActiveTab] = useState<TabValue>(
-		tabs[0].value as TabValue
+const Analysis = ({ res }) => {
+	const tabs: TabsType[] = [
+		{
+			value: AnalysisTabs.Overview,
+			label: AnalysisTabs.Overview,
+			icon: Calendar,
+			content: <OverviewAnalysis data={res.analysis} />,
+		},
+		{
+			value: AnalysisTabs.Features,
+			label: AnalysisTabs.Features,
+			icon: Feather,
+			content: <FeaturesAnalysis />,
+		},
+		{
+			value: AnalysisTabs.Market,
+			label: AnalysisTabs.Market,
+			icon: Store,
+			content: <MarketAnalysis />,
+		},
+	];
+	const [activeTab, setActiveTab] = useState<AnalysisTabs>(
+		tabs[0].value as AnalysisTabs
 	);
 
 	const handleTabChange = (value: string) => {
-		setActiveTab(value as TabValue);
+		setActiveTab(value as AnalysisTabs);
 	};
 
 	const handleNext = () => {
@@ -82,18 +80,19 @@ const tabs: TabsType[] = [
 							</TabsTrigger>
 						))}
 					</TabsList>
-					{tabs.map((tab) => (
-						<TabsContent
-							className=" flex-1 m-2 rounded-lg overflow-hidden"
-							key={tab.value}
-							value={tab.value}
-						>
-							{tab.content}
-						</TabsContent>
-					))}
+					{tabs &&
+						tabs.map((tab) => (
+							<TabsContent
+								className=" flex-1 m-2 rounded-lg overflow-hidden"
+								key={tab.value}
+								value={tab.value}
+							>
+								{tab.content}
+							</TabsContent>
+						))}
 				</Tabs>
 			</main>
-			<div className="flex justify-end">
+			{/* <div className="flex justify-end">
 				<Button
 					variant="default"
 					className="relative pe-12 mb-4"
@@ -109,7 +108,7 @@ const tabs: TabsType[] = [
 						/>
 					</span>
 				</Button>
-			</div>
+			</div> */}
 		</div>
 	);
 };
