@@ -60,7 +60,7 @@ const Analysis = ({ res }) => {
 	};
 
 	return (
-		<div className="flex flex-col w-full h-full">
+		<div className="flex flex-col w-full h-full font-sans">
 			<main className="flex-1 flex flex-col">
 				<Tabs
 					value={activeTab}

@@ -88,12 +88,9 @@ export function NavUser({
 							<DropdownMenuGroup>
 								<DropdownMenuItem>
 									<BadgeCheck />
-									Account
+									Profile
 								</DropdownMenuItem>
-								<DropdownMenuItem>
-									<CreditCard />
-									Billing
-								</DropdownMenuItem>
+							
 								<DropdownMenuItem>
 									<Bell />
 									Notifications

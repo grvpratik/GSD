@@ -26,7 +26,7 @@ export default function AiLayout({ children }: { children: React.ReactNode }) {
 	return (
 		<SidebarProvider >
 			<AppSidebar user={data.user} history={history} />
-			<main className=" w-full h-screen flex flex-col  font-sans ">
+			<main className=" w-full h-screen flex flex-col   ">
 				<Nav />
 				{children}
 			</main>

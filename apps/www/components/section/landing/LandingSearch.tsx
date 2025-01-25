@@ -15,24 +15,40 @@ import { useClickOutside } from "www/hooks/use-click-outside";
 import { Button } from "www/components/ui/button";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useToast } from "www/hooks/use-toast";
+import { MIN_HEIGHT, MAX_HEIGHT, PROJECT_TYPE, AI_MODELS_LIST } from "www/lib/constant";
 
-const MIN_HEIGHT = 48;
-const MAX_HEIGHT = 164;
 
-const PROJECT_TYPE = [
-	{ name: "Personal Project", description: "Want to learn" },
-	{ name: "Buisness idea", description: "want to build" },
-];
 
-const AI_MODELS = [
-	{ name: "GPT-4", description: "The popular kid" },
-	{ name: "Gemini", description: "Pretty new" },
-	{ name: "Claude", description: "Yes, the best for coding" },
-].map((model) => ({ ...model, icon: <Brain className="w-4 h-4" /> }));
+const AI_MODELS = AI_MODELS_LIST.map((model) => ({ ...model, icon: <Brain className="w-4 h-4" /> }));
+interface StateProps {
+	value: string;
+	selectedAgent: string;
+	selectedModel: string;
+	isAgentMenuOpen: boolean;
+	isModelMenuOpen: boolean;
+}
+
+interface SearchInput {
+  value: string;
+  agent: string;
+  model: string;
+}
+
+const searchService = {
+  async submit(input: SearchInput) {
+    return axios.post(`${process.env.NEXT_PUBLIC_API}/search`, input, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }
+};
 
 export default function AiSearch() {
-	const [loading, setLoading] = useState(false);
-	const [state, setState] = useState({
+	const { toast } = useToast();
+	const [loading, setLoading] = useState<boolean>(false);
+	const [state, setState] = useState<StateProps>({
 		value: "",
 		selectedAgent: PROJECT_TYPE[0].name,
 		selectedModel: AI_MODELS[0].name,
@@ -46,41 +62,47 @@ export default function AiSearch() {
 	});
 	const router = useRouter();
 	const handleSubmit = async () => {
-		if (!state.value) return;
-		console.log(state, "state");
-		const input = {
-			value: state.value,
-			agent: state.selectedAgent,
-			model: state.selectedModel,
-		};
-		// alert(JSON.stringify(input, null, 2));
+		if (!isValidInput(state)) return;
+		
 		setLoading(true);
-		// setError(null);
+		
 		try {
-			const response = await axios.post(
-				"http://localhost:8787/ai/search",
-				input,
-				{
-					headers: {
-						"Content-Type": "application/json",
-					},
-				}
-			);
-			console.log(response, "response");
-			if (response.status !== 200) {
-				alert("Error");
-				return;
-			}
-
-			const result = await response.data;
-			console.log(result, "result");
-			router.push(`/ai/build/${result.id}`);
-		} catch (err: any) {
-			// setError(err.message);
+			const response = await searchService.submit({
+				value: state.value,
+				agent: state.selectedAgent,
+				model: state.selectedModel,
+			});
+		
+			const result = response.data;
+			await router.push(`/ai/build/${result.id}`);
+			
+		} catch (error) {
+			handleError(error);
 		} finally {
 			setLoading(false);
 			adjustHeight(true);
 		}
+	};
+
+	const isValidInput = (state: StateProps): boolean => {
+		if (!state.value?.trim()) {
+			toast({
+				variant: "destructive",
+				title: "Validation Error",
+				description: "Please enter a search value",
+			});
+			return false;
+		}
+		return true;
+	};
+	
+	const handleError = (error: unknown) => {
+		const message = error instanceof Error ? error.message : "Internal Server Error";
+		toast({
+			variant: "destructive",
+			title: "Error occurred",
+			description: message,
+		});
 	};
 
 	const agentMenuRef = useRef<HTMLDivElement>(null);

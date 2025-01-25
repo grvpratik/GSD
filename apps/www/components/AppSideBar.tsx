@@ -1,104 +1,114 @@
 "use client";
-import { MessageSquare, UserIcon, LucideIcon } from "lucide-react";
+import { UserIcon } from "lucide-react";
 import { useState, useMemo } from "react";
-import { memo } from "react";
 import {
-	Sidebar,
-	SidebarContent,
-	SidebarGroup,
-	SidebarGroupContent,
-	SidebarGroupLabel,
-	SidebarHeader,
-	SidebarMenu,
-	SidebarMenuButton,
-	SidebarMenuItem,
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
 } from "www/components/ui/sidebar";
-import SideBarSearch from "./ui/search";
-import { NavUser } from "./NavUser";
+import { SidebarItem } from "www/components/AppSideBar/SidebarItem";
+import SideBarSearch from "www/components/ui/search";
+import { NavUser } from "www/components/NavUser";
+import { AppSidebarProps } from "www/types/sidebar.types";
+import { MAIN_MENU_ITEMS, FOOTER_MENU_ITEMS } from "www/lib/constant";
 
-import MainResponse from "shared/db/temp";
-import { SearchHistory } from "www/app/(ai)/layout";
-interface MenuItem {
-	title: string;
-	url: string;
-	icon?: LucideIcon;
-}
+export function AppSidebar({ user, history }: AppSidebarProps) {
+  const [searchQuery, setSearchQuery] = useState("");
 
-interface User {
-	name: string;
-	email: string;
-	avatar: string;
-}
+  const filteredItems = useMemo(
+    () => history.filter((item) => 
+      item.title.toLowerCase().includes(searchQuery.toLowerCase())
+    ),
+    [history, searchQuery]
+  );
 
-interface AppSidebarProps {
-	user: User;
-	history:SearchHistory[];
-}
+  return (
+    <Sidebar variant="floating" className="overflow-hidden font-sans">
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <div className="flex gap-2 items-center p-2">
+              <div className="flex py-2 aspect-square size-5 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground">
+                <UserIcon className="size-4" />
+              </div>
+              <span className="truncate font-semibold">BuildAi</span>
+            </div>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
 
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SideBarSearch
+                onSearchChange={setSearchQuery}
+                value={searchQuery}
+              />
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
 
+        <SidebarGroup>
+          <SidebarGroupLabel>Main</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {MAIN_MENU_ITEMS.map((item) => (
+                <SidebarMenuItem key={item.name}>
+                  <SidebarMenuButton asChild>
+                    <a href={item.url}>
+                      <item.icon />
+                      <span>{item.name}</span>
+                    </a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
 
-const MemoizedSidebarItem = memo(({ item }: { item: MenuItem }) => (
-	<SidebarMenuItem key={item.title} className=" rounded-lg">
-		<SidebarMenuButton asChild>
-			<a href={item.url} className="flex items-center gap-2 p-1">
-				<MessageSquare className="h-4 w-4" />
-				<span className="truncate">{item.title}</span>
-			</a>
-		</SidebarMenuButton>
-	</SidebarMenuItem>
-));
-MemoizedSidebarItem.displayName = "MemoizedSidebarItem";
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarGroupLabel>Previous</SidebarGroupLabel>
+              {filteredItems.length === 0 ? (
+                <div className="px-4 py-2 text-sm text-muted-foreground">
+                  No items found
+                </div>
+              ) : (
+                filteredItems.map((item) => (
+                  <SidebarItem key={item.title} item={item} />
+                ))
+              )}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
 
-export function AppSidebar({ user,history }: AppSidebarProps) {
-	const [searchQuery, setSearchQuery] = useState("");
-	
-	const filteredItems = useMemo(
-		() =>
-			history.filter((item) =>
-				item.title.toLowerCase().includes(searchQuery.toLowerCase())
-			),
-		[searchQuery]
-	);
-	
-	return (
-		<Sidebar  variant="floating" className=" overflow-hidden font-sans ">
-			<SidebarHeader>
-				<SidebarMenu >
-					<SidebarMenuItem>
-						<div className="flex gap-2 items-center p-2">
-							<div className="flex py-2 aspect-square size-5 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground">
-								<UserIcon className="size-3" />
-							</div>
-							<span className="truncate font-semibold">BuildAi</span>
-						</div>
-					</SidebarMenuItem>
-				</SidebarMenu>
-			</SidebarHeader>
+      <SidebarGroup>
+        <SidebarGroupContent>
+          <SidebarMenu>
+            {FOOTER_MENU_ITEMS.map((item) => (
+              <SidebarMenuItem key={item.name}>
+                <SidebarMenuButton asChild>
+                  <a href={item.url}>
+                    <item.icon />
+                    <span>{item.name}</span>
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroupContent>
+      </SidebarGroup>
 
-			<SidebarContent>
-				<SidebarGroup>
-					<SidebarGroupContent>
-						<SidebarMenu>
-							<SideBarSearch
-								onSearchChange={(query: string) => setSearchQuery(query)}
-								value={searchQuery}
-							/>
-							<SidebarGroupLabel>Previous</SidebarGroupLabel>
-							{filteredItems.length === 0 ?
-								<div className="px-4 py-2 text-sm text-muted-foreground">
-									No items found
-								</div>
-							:	filteredItems.map((item) => (
-									<MemoizedSidebarItem key={item.title} item={item} />
-								))
-							}
-						</SidebarMenu>
-					</SidebarGroupContent>
-				</SidebarGroup>
-				
-			</SidebarContent>
-
-			<NavUser user={user} />
-		</Sidebar>
-	);
+      <NavUser user={user} />
+    </Sidebar>
+  );
 }

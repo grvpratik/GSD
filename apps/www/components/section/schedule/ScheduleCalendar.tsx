@@ -17,7 +17,7 @@ interface ScheduleCalendarProps {
 
 
 
-const selectedDateTasks = (date: Date, phases: Phase[]): Phase | undefined => {
+const selectedDateTasks: (date: Date, phases: Phase[]) => Phase | undefined = (date, phases) => {
 	const targetDate = new Date(date!);
 	return phases.find((phase: Phase) => {
 		const start = new Date(phase.start_date);

@@ -1,21 +1,9 @@
-import React from 'react';
-import { 
-  Lock, 
-  PieChart, 
-  Star, 
-  Layers, 
-  Shield, 
-  Settings, 
-  Zap, 
-  Database 
-} from 'lucide-react';
 
-const featureIcons = {
-  'must-have': Shield,
-  'should-have': Settings,
-  'nice-to-have': Star
-};
+import React, { useState } from 'react';
+import { Settings, Shield, Star, Trash2, Edit, Plus, X } from 'lucide-react';
+import { AddFeatureDialog } from 'www/components/FeatureDialog';
 
+// Types
 interface FeatureProps {
     id: string;
     name: string;
@@ -23,19 +11,192 @@ interface FeatureProps {
     priority: string;
     complexity: number;
     type: "must-have" | "should-have" | "nice-to-have";
-    icon: any;
 }
 
-const FeaturesAnalysis: React.FC = () => {
-    const features: FeatureProps[] = [
+// Feature Types Configuration
+const FEATURE_TYPES = [
+    { name: 'must-have', icon: Shield, color: 'bg-red-50 border-red-200' },
+    { name: 'should-have', icon: Settings, color: 'bg-blue-50 border-blue-200' },
+    { name: 'nice-to-have', icon: Star, color: 'bg-green-50 border-green-200' }
+];
+
+// API Service (simulated)
+const FeatureService = {
+    async addFeature(feature: Omit<FeatureProps, 'id'>) {
+        try {
+            // Simulated API call
+            const response = await fetch('/api/features', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(feature)
+            });
+            
+            if (!response.ok) throw new Error('Failed to add feature');
+            
+            return await response.json();
+        } catch (error) {
+            console.error('Add feature error:', error);
+            throw error;
+        }
+    },
+    
+    async deleteFeature(featureId: string) {
+        try {
+            const response = await fetch(`/api/features/${featureId}`, {
+                method: 'DELETE'
+            });
+            
+            if (!response.ok) throw new Error('Failed to delete feature');
+            
+            return true;
+        } catch (error) {
+            console.error('Delete feature error:', error);
+            throw error;
+        }
+    }
+};
+
+
+// Feature Card Component
+const FeatureCard = ({ 
+    feature, 
+    onFeatureDelete 
+}: { 
+    feature: FeatureProps, 
+    onFeatureDelete: (id: string) => void 
+}) => {
+    return (
+        <div className="bg-white p-4 rounded-lg shadow-md mb-3 relative">
+            <div className="flex justify-between items-start">
+                <div>
+                    <h3 className="font-bold text-lg">{feature.name}</h3>
+                    <p className="text-gray-600 text-sm">{feature.description}</p>
+                </div>
+                <div className="flex space-x-2">
+                    <button 
+                        className="text-red-500 hover:text-red-700"
+                        onClick={() => onFeatureDelete(feature.id)}
+                    >
+                        <Trash2 size={20} />
+                    </button>
+                </div>
+            </div>
+            <div className="mt-2 flex justify-between items-center">
+                <span className={`
+                    px-2 py-1 rounded-full text-xs
+                    ${feature.priority === 'High' ? 'bg-red-100 text-red-800' : 
+                      feature.priority === 'Medium' ? 'bg-yellow-100 text-yellow-800' : 
+                      'bg-green-100 text-green-800'}
+                `}>
+                    {feature.priority}
+                </span>
+                <div className="flex items-center">
+                    <div className="w-24 bg-gray-200 rounded-full h-2.5 mr-2">
+                        <div 
+                            className="bg-blue-600 h-2.5 rounded-full" 
+                            style={{width: `${feature.complexity * 10}%`}}
+                        ></div>
+                    </div>
+                    <span className="text-xs text-gray-500">
+                        {feature.complexity}/10
+                    </span>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// Feature Card Wrapper Component
+const FeatureCardWrapper = ({ 
+    features, 
+    type 
+}: { 
+    features: FeatureProps[], 
+    type: string 
+}) => {
+    
+    const [featuresList, setFeaturesList] = useState(features);
+
+    const handleAddFeature = async (newFeature: Omit<FeatureProps, 'id'>) => {
+        console.log(newFeature, 'newFeature');
+        try {
+            // Optimistic update
+            const optimisticFeature = {
+                ...newFeature,
+                id: `temp-${Date.now()}`
+            };
+            setFeaturesList(prev => [...prev, optimisticFeature]);
+
+            // Actual API call
+            const addedFeature = await FeatureService.addFeature(newFeature);
+            
+            // Replace optimistic feature with actual feature
+            setFeaturesList(prev => 
+                prev.map(f => f.id === optimisticFeature.id ? addedFeature : f)
+            );
+        } catch (error) {
+            // Remove optimistic feature if API call fails
+            setFeaturesList(prev => 
+                prev.filter(f => f.id !== `temp-${Date.now()}`)
+            );
+        }
+    };
+
+    const handleDeleteFeature = async (featureId: string) => {
+        try {
+            // Optimistic update
+            setFeaturesList(prev => prev.filter(f => f.id !== featureId));
+
+            // Actual API call
+            await FeatureService.deleteFeature(featureId);
+        } catch (error) {
+            // Revert if deletion fails
+            // Here you might want to fetch the latest data or show an error
+            console.error('Failed to delete feature', error);
+        }
+    };
+
+    const typeConfig = FEATURE_TYPES.find(t => t.name === type);
+    const TypeIcon = typeConfig?.icon || Shield;
+
+    return (
+        <div className={`p-4 rounded-lg border ${typeConfig?.color || 'bg-gray-50'}`}>
+            <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-bold flex items-center">
+                    <TypeIcon className="mr-2 text-gray-600" size={24} />
+                    {type.replace('-', ' ').toUpperCase()}
+                </h2>
+               
+
+                <AddFeatureDialog type={type} onAddFeature={handleAddFeature} loading/>
+            </div>
+
+            {featuresList
+                .filter((feature) => feature.type === type)
+                .map((feature) => (
+                    <FeatureCard 
+                        key={feature.id} 
+                        feature={feature} 
+                        onFeatureDelete={handleDeleteFeature}
+                    />
+                ))
+            }
+
+           
+        </div>
+    );
+};
+
+// Main Features Analysis Component
+const FeaturesAnalysis = ({ featureslist }: { featureslist: FeatureProps[] }) => {
+    const initialData = featureslist&& featureslist.length > 0 ? featureslist : [
         {
             id: '1',
             name: 'User Authentication',
             description: 'Secure login and registration system',
             priority: 'High',
             complexity: 7,
-            type: 'must-have',
-            icon: Lock
+            type: 'must-have' as 'must-have',
         },
         {
             id: '2',
@@ -43,8 +204,7 @@ const FeaturesAnalysis: React.FC = () => {
             description: 'Comprehensive performance insights',
             priority: 'Medium',
             complexity: 6,
-            type: 'should-have',
-            icon: PieChart
+            type: 'should-have' as 'should-have',
         },
         {
             id: '3',
@@ -52,8 +212,7 @@ const FeaturesAnalysis: React.FC = () => {
             description: 'Optional dark and light modes',
             priority: 'Low',
             complexity: 3,
-            type: 'nice-to-have',
-            icon: Layers
+            type: 'nice-to-have' as 'nice-to-have',
         },
         {
             id: '4',
@@ -61,77 +220,19 @@ const FeaturesAnalysis: React.FC = () => {
             description: 'Real-time cloud sync',
             priority: 'High',
             complexity: 8,
-            type: 'must-have',
-            icon: Database
+            type: 'must-have' as 'must-have',
         }
     ];
 
-    const typeColors = {
-        'must-have': 'bg-red-50 border-red-200',
-        'should-have': 'bg-blue-50 border-blue-200',
-        'nice-to-have': 'bg-green-50 border-green-200'
-    };
-
     return (
-        <div className="container mx-auto p-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {Object.entries(
-                    features.reduce((acc, feature) => {
-                        if (!acc[feature.type]) acc[feature.type] = [];
-                        acc[feature.type].push(feature);
-                        return acc;
-                    }, {} as Record<string, FeatureProps[]>)
-                ).map(([type, typeFeatures]) => (
-                    <div 
-                        key={type} 
-                        className={`p-4 rounded-lg border ${typeColors[type as keyof typeof typeColors]}`}
-                    >
-                        <h2 className="text-xl font-bold mb-4 flex items-center">
-                            {React.createElement(featureIcons[type as keyof typeof featureIcons], { 
-                                className: "mr-2 text-gray-600",
-                                size: 24 
-                            })}
-                            {type.replace('-', ' ').toUpperCase()}
-                        </h2>
-                        <div className="space-y-3">
-                            {typeFeatures.map(feature => (
-                                <div 
-                                    key={feature.id} 
-                                    className="bg-white p-3 rounded-md shadow-sm hover:shadow-md transition-all"
-                                >
-                                    <div className="flex justify-between items-start">
-                                        <div className="flex items-center">
-                                           
-<feature.icon className="text-blue-600 mr-2" size={20} />
-                                            <h3 className="font-semibold">{feature.name}</h3>
-                                        </div>
-                                        <span className={`
-                                            px-2 py-1 rounded-full text-xs
-                                            ${feature.priority === 'High' ? 'bg-red-100 text-red-800' : 
-                                              feature.priority === 'Medium' ? 'bg-yellow-100 text-yellow-800' : 
-                                              'bg-green-100 text-green-800'}
-                                        `}>
-                                            {feature.priority}
-                                        </span>
-                                    </div>
-                                    <p className="text-sm text-gray-600 mt-2">{feature.description}</p>
-                                    <div className="mt-2 flex justify-between items-center">
-                                        <div className="w-full bg-gray-200 rounded-full h-2.5">
-                                            <div 
-                                                className="bg-blue-600 h-2.5 rounded-full" 
-                                                style={{width: `${feature.complexity * 10}%`}}
-                                            ></div>
-                                        </div>
-                                        <span className="ml-2 text-xs text-gray-500">
-                                            {feature.complexity}/10
-                                        </span>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                ))}
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {FEATURE_TYPES.map((type) => (
+                <FeatureCardWrapper 
+                    key={type.name} 
+                    features={initialData} 
+                    type={type.name} 
+                />
+            ))}
         </div>
     );
 };

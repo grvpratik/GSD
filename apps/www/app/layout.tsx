@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import "www/styles/globals.css";
 
 import { geistMono, geistSans } from "./font";
+import { Toaster } from "www/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,9 +18,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased `}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased  `}
       >
         {children}
+        <Toaster/>
       </body>
     </html>
   );
