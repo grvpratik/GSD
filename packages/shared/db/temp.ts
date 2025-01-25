@@ -62,36 +62,6 @@
 			},
 		},
 
-		schedule: {
-			core: {
-				start_date: new Date("2022-01-01"),
-				end_date: new Date("2022-06-30"),
-				tasks: [
-					{
-						id: "1",
-						title: "Market Research",
-						desc: "Conduct market research to identify target audience and competitors.",
-						completed: true,
-						priority: "high",
-					},
-					{
-						id: "2",
-						title: "Competitor Analysis",
-						desc: "Conduct market research to identify target audience and competitors.",
-						completed: true,
-						priority: "medium",
-					},
-				], //atleast
-			}, //core fratures implementation
-			features: {}, //,mvp development
-
-			database: {},
-			server: {},
-			services: {},
-			ui: {},
-			optimisation: {},
-			deployment: {},
-		},
 		phases: [
 			{
 				name: "core",
@@ -123,5 +93,6 @@
 			// Add other phases similarly
 		],
 	},
+	
 ];
 export default MainResponse;

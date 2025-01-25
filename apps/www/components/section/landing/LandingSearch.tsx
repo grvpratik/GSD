@@ -36,6 +36,7 @@ interface SearchInput {
 }
 
 const searchService = {
+	
   async submit(input: SearchInput) {
     return axios.post(`${process.env.NEXT_PUBLIC_API}/search`, input, {
       headers: {
@@ -74,7 +75,7 @@ export default function AiSearch() {
 			});
 		
 			const result = response.data;
-			await router.push(`/ai/build/${result.id}`);
+			await router.push(`/build/${result.id}`);
 			
 		} catch (error) {
 			handleError(error);

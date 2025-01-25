@@ -1,6 +1,6 @@
 import React from "react";
 import { OverviewBarChart } from "www/components/RadarChart";
-import ScoreIndicator from "./ScoreIndicator";
+import ScoreIndicator from "../../ScoreIndicator";
 
 interface OverviewAnalysisProps {
 	feasibility: {
@@ -59,9 +59,9 @@ const OverviewAnalysis: React.FC<{ data: OverviewAnalysisProps }> = ({
 
 				</div>
 			</div> */}
-			<div className="  h-full  grid gap-2 grid-cols-3 grid-rows-3">
+			<div className="  h-full  grid gap-2 lg:grid-cols-3 lg:grid-rows-2 grid-rows- grid-cols-1">
 				<div className="flex flex-col gap-1 p-4">
-					<div className="size-12 bg-black rounded-lg"></div>
+					<div className="size-12 bg-blue-500 rounded-lg"></div>
 					<h1 className=" font-bold text-lg">Project Name</h1>
 					<span className="  font-semibold text-sm ">Overview</span>
 					<span className=" text-sm opacity-90">
@@ -71,7 +71,7 @@ const OverviewAnalysis: React.FC<{ data: OverviewAnalysisProps }> = ({
 						praesentium repellendus dolorem animi? Eveniet!
 					</span>
 				</div>
-				<div className=" col-span-2 row-span-1 gap-2 grid grid-cols-2 grid-rows-1">
+				<div className=" col-span-1 lg:col-span-2 row-span-1 gap-2 grid grid-cols-2 grid-rows-1">
 					<div>
 						<ScoreIndicator score={54} />
 					</div>
@@ -82,29 +82,7 @@ const OverviewAnalysis: React.FC<{ data: OverviewAnalysisProps }> = ({
 				<div>competetiors</div>
 				<div>community</div>
 			</div>
-			{/* <OverviewBarChart data={chart} />
-      
-        <div className='grid grid-cols-1 gap-6 mt-6 sm:grid-cols-2'>
-            {Object.keys(data).map((key) => {
-            const { score, overview, description, considerations } = data[key as keyof OverviewAnalysisProps];
-            return (
-                <div key={key} className='p-6 bg-white rounded-lg shadow-md'>
-                <h3 className='text-lg font-semibold text-gray-800'>{key.toUpperCase()}</h3>
-                <p className='text-sm text-gray-600 mt-2'>{overview}</p>
-                <p className='text-sm text-gray-600 mt-2'>{description}</p>
-                <ul className='list-disc list-inside mt-4'>
-                    {considerations.map((consideration) => (
-                    <li key={consideration} className='text-sm text-gray-600'>{consideration}</li>
-                    ))}
-                </ul>
-                <div className='mt-4'>
-                    <span className='text-sm font-semibold text-gray-800'>Score:</span>
-                    <span className='text-sm text-gray-600 ml-2'>{score}</span>
-                </div>
-                </div>
-            );
-            })}
-        </div> */}
+			
 		</main>
 	);
 };

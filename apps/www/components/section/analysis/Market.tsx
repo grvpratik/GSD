@@ -7,32 +7,6 @@ import React from "react";
 // 	deployment: string;
 // 	services: string;
 // }
-// interface MarketAnalysisProps {
-// 	marketSize: {
-// 		score: number;
-// 		overview: string;
-// 		description: string;
-// 		considerations: string[];
-// 	};
-// 	marketTrends: {
-// 		score: number;
-// 		overview: string;
-// 		description: string;
-// 		considerations: string[];
-// 	};
-// 	targetAudience: {
-// 		score: number;
-// 		overview: string;
-// 		description: string;
-// 		considerations: string[];
-// 	};
-// 	competition: {
-// 		score: number;
-// 		overview: string;
-// 		description: string;
-// 		considerations: string[];
-// 	};
-// }
 
 
 import { Card, CardContent, CardHeader, CardTitle } from "www/components/ui/card";

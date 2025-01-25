@@ -138,5 +138,53 @@ export interface IdeaInput {
 	model: string;
 	type: "personal" | "buissness";
 }
+  interface Competitor {
+	name: string;
+	description: string;
+	url: string;
+	userBase: string;
+	uniqueFeatures: string[];
+	marketGaps: string[];
+  }
+interface FeatureProps {
+    id: string;
+    name: string;
+    description: string; 
+    priority: string;//high,medium,low
+    complexity: number;//0-10
+    type: "must-have" | "should-have" | "nice-to-have";//must-have means it is a core feature like for mvp development
+}
+export interface EvaluationResult {
+	name: string;
+	description: string;
+	overview: {
+		feasibility: {
+			score: number;//0-100
+			overview: string;//brief info about the aspect on idea
 
+			considerations: string[];
+		};
+		marketFit: {
+			score: number;//0-100
+			overview: string;
+
+			considerations: string[];
+		};
+		uniqueness: {
+			score: number;//0-100
+			overview: string;
+
+			considerations: string[];
+		}
+		technical: {
+			score: number;//0-100
+			overview: string;
+
+			considerations: string[];
+		}
+	};
+	features: FeatureProps[];
+	market: Competitor[];
+
+}
 

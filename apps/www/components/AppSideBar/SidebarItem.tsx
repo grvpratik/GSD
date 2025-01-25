@@ -11,7 +11,7 @@ export const SidebarItem = memo(({ item }: { item: MenuItem }) => {
     <SidebarMenuItem key={item.title} className="rounded-lg">
       <SidebarMenuButton asChild>
         <a href={item.url} className="flex items-center gap-2 p-1">
-          <span className={cn("size-2 mx-1 rounded-full", bgColor)} />
+          <span className={cn("size-2 mx-1 rounded-full bg-violet-500",)} />
           <span className="truncate">{item.title}</span>
         </a>
       </SidebarMenuButton>
