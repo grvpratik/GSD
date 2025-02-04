@@ -13,35 +13,17 @@ PS3="Select commit type (use arrow keys and press Enter): "
 options=("core" "ui" "docs" "fix" "test" "Quit")
 select opt in "${options[@]}"
 do
-    case $opt in
-        "core")
-            type_key="core"
-            break
-            ;;
-        "ui")
-            type_key="ui"
-            break
-            ;;
-        "docs")
-            type_key="docs"
-            break
-            ;;
-        "fix")
-            type_key="fix"
-            break
-            ;;
-        "test")
-            type_key="test"
-            break
-            ;;
-        "Quit")
+    if [[ " ${options[@]} " =~ " ${opt} " ]]; then
+        if [[ "$opt" == "Quit" ]]; then
             echo "Commit canceled."
             exit 0
-            ;;
-        *)
-            echo "Invalid option $REPLY"
-            ;;
-    esac
+        else
+            type_key="$opt"
+            break
+        fi
+    else
+        echo "Invalid option $REPLY"
+    fi
 done
 
 read -p "Enter your commit message: " message
@@ -50,6 +32,5 @@ emoji=${emoji_map[$type_key]}
 git add .
 git commit -m "$type_key $emoji: $message"
 git push
-
 
 echo "Committed with $type_key $emoji: $message"
