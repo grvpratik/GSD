@@ -36,7 +36,7 @@ const Analysis = ({ res }) => {
 			value: AnalysisTabs.Features,
 			label: AnalysisTabs.Features,
 			icon: Feather,
-			content: <FeaturesAnalysis />,
+			content: <FeaturesAnalysis featureslist={[]} />,
 		},
 		{
 			value: AnalysisTabs.Market,

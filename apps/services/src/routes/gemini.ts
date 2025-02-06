@@ -6,7 +6,7 @@ import {
 
 export async function geminiEvaluation(c: any) { 
     const { GEMINI_API } = c.env
-    console.log(GEMINI_API, "GEMINI_API");
+  
     const body = await c.req.json();
     const { value, agent, model } = body;
     if (!value || !agent || !model) {
@@ -44,7 +44,8 @@ export async function geminiEvaluation(c: any) {
             {
                 role: "user",
                 parts: [
-                    { text: "# Business Idea Analysis Template\n\nProvide a comprehensive analysis of business ideas using the following structure:\n\n## 1. Overview\nAnalyze the idea across key dimensions:\n- Market fit and potential\n- Implementation complexity (Rate 1-10)\n- Technical difficulty (Rate 1-10)\n- Resource requirements\n- Competitive landscape\n- Time to market\n- Overall viability score (Rate 1-10)\n\n## 2. Core Features\nReturn an array of essential features:\n```typescript\n{\n  features: [\n    {\n      name: string,\n      description: string,\n      priority: \"must-have\" | \"should-have\" | \"nice-to-have\",\n      complexity: 1-10,\n      \n    }\n  ]\n}\n```\n\n## 3. Technology Stack\nCategorize technology options for each component:\n\n### Infrastructure\n- Popular solutions (e.g., AWS, GCP)\n- Cost-effective alternatives (e.g., DigitalOcean)\n- Self-hosted options\n\n### Core Technologies\n- Frontend frameworks\n- Backend technologies\n- Databases\n- Additional services (AI, analytics, etc.)\n\n## 4. Market Analysis\nReturn structured data about:\n\n### Existing Solutions\n```typescript\n{\n  competitors: [\n    {\n      name: string,\n      description: string,\n      url: string,\n      userBase: string,\n      uniqueFeatures: string[]\n    }\n  ]\n}\n```\n\n### Feature Analysis\n```typescript\n{\n  competitorAdvantages: string[], // Features competitors do better\n  marketGaps: string[],          // Features competitors lack\n  innovativeFeatures: string[]   // Suggested new features\n}\n```\n\nExample request: \"Analyze an AI-powered social media scheduler that optimizes posting times and generates content suggestions.\"" },
+                    { 
+                      text: "# Business Idea Analysis Template\n\nProvide a comprehensive analysis of business ideas using the following structure:\n\n## 1. Overview\nAnalyze the idea across key dimensions:\n- Market fit and potential\n- Implementation complexity (Rate 1-10)\n- Technical difficulty (Rate 1-10)\n- Resource requirements\n- Competitive landscape\n- Time to market\n- Overall viability score (Rate 1-10)\n\n## 2. Core Features\nReturn an array of essential features:\n```typescript\n{\n  features: [\n    {\n      name: string,\n      description: string,\n      priority: \"must-have\" | \"should-have\" | \"nice-to-have\",\n      complexity: 1-10,\n      \n    }\n  ]\n}\n```\n\n## 3. Technology Stack\nCategorize technology options for each component:\n\n### Infrastructure\n- Popular solutions (e.g., AWS, GCP)\n- Cost-effective alternatives (e.g., DigitalOcean)\n- Self-hosted options\n\n### Core Technologies\n- Frontend frameworks\n- Backend technologies\n- Databases\n- Additional services (AI, analytics, etc.)\n\n## 4. Market Analysis\nReturn structured data about:\n\n### Existing Solutions\n```typescript\n{\n  competitors: [\n    {\n      name: string,\n      description: string,\n      url: string,\n      userBase: string,\n      uniqueFeatures: string[]\n    }\n  ]\n}\n```\n\n### Feature Analysis\n```typescript\n{\n  competitorAdvantages: string[], // Features competitors do better\n  marketGaps: string[],          // Features competitors lack\n  innovativeFeatures: string[]   // Suggested new features\n}\n```\n\nExample request: \"Analyze an AI-powered social media scheduler that optimizes posting times and generates content suggestions.\"" },
                 ],
             },
             {
@@ -73,6 +74,7 @@ export async function geminiEvaluation(c: any) {
     });
     const result = await chatSession.sendMessage(value);
     const textRes = result.response.text();
+    console.log(result.response)
     const JsonRes = JSON.parse(textRes);
 
 

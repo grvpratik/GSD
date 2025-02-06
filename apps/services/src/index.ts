@@ -4,18 +4,19 @@ import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { prettyJSON } from "hono/pretty-json";
 import { geminiEvaluation, projectDetails } from "./routes/gemini";
+import { base } from "./routes/route";
 
 const app = new Hono<{ Bindings: CloudflareBindings }>();
 
 app.use("*", logger());
 app.use("*", prettyJSON());
 app.use("*", cors());
+app.route('/',base)
 
-app.get("/", (c) => {
-	return c.json({ status: "ok", message: "Server is running" });
-});
 
 app.post("/ai/search", geminiEvaluation);
+
+
 app.post("/ai/project", projectDetails);
 app.onError((err, c) => {
 	console.error(`${err}`);
