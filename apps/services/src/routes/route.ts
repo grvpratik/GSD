@@ -1,4 +1,6 @@
 import { Hono } from "hono";
+import { geminiEvaluation } from "./gemini";
+import { searchController } from "../controller/search.controller";
 
 export const base = new Hono();
 
@@ -7,10 +9,10 @@ base.all("/", (c) => {
 	return c.json({ status: "ok", message: "Server is running" });
 });
 
-base.post('/search')
+base.post('/search',searchController)
 
 
-//ai details
+//project details
 base.post("/build/:id")
 base.post("/personal/:id")
 

@@ -14,7 +14,7 @@ app.use("*", cors());
 app.route('/',base)
 
 
-app.post("/ai/search", geminiEvaluation);
+
 
 
 app.post("/ai/project", projectDetails);
