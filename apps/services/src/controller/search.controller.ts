@@ -17,7 +17,6 @@ export async function searchController(c: any) {
 		model: MODEL_TYPE,
 	});
 
-	
 	//model instruction
 	//response type
 	//error type
@@ -67,96 +66,32 @@ export async function searchController(c: any) {
 		],
 	});
 
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	const result = await chatSession.sendMessage(value);
 	const textRes = result.response.text();
 	console.log(result.response);
 	const JsonRes = JSON.parse(textRes);
 
 	const { name, description, image } = getBriefDescription(value);
-	const overview= {
-        score:{},
-        about:{},
-        mvp:{},
-        competitors:{},
-        indication:{}
+	const overview = {
+		score: {},
+		about: {},
+		mvp: {},
+		competitors: {},
+		indication: {},
+	};
+	const market = {
+		competitors: [],
+		audience: [],
+		reddit: [],
+		pain_points: [],
+		gaps: [],
+		trends: [],
+	};
+	const fetature = {
+		mvp: [],
+		features: [],
+	};
 
-    };
-    const market={
-        competitors:[],
-        audience:[],
-        reddit:[],
-        pain_points:[],
-        gaps:[],
-        trends:[]
-
-    }
-    const fetature={
-        mvp:[],
-        features:[]
-    }
-    
 	const resFormat = {
 		id: "12",
 		name: name,
@@ -164,8 +99,8 @@ export async function searchController(c: any) {
 		image: image,
 		timespan: new Date(),
 		overview: overview,
-        feature:fetature,
-        market:market,
+		feature: fetature,
+		market: market,
 	};
 
 	return c.json(JSON.stringify(JsonRes), {
