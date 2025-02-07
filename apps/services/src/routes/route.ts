@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { geminiEvaluation } from "./gemini";
+
 import { searchController } from "../controller/search.controller";
 
 export const base = new Hono();

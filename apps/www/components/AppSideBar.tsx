@@ -12,7 +12,7 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from "www/components/ui/sidebar";
-import { SidebarItem } from "www/components/AppSideBar/SidebarItem";
+import { SidebarItem } from "www/components/sidebar/SidebarItem";
 import SideBarSearch from "www/components/ui/search";
 import { NavUser } from "www/components/NavUser";
 import { AppSidebarProps } from "www/types/sidebar.types";

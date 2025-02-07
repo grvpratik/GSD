@@ -1,39 +1,39 @@
 import React from "react";
-import { OverviewBarChart } from "www/components/RadarChart";
+
 import ScoreIndicator from "../../ScoreIndicator";
 
-// interface OverviewAnalysisProps {
-// 	feasibility: {
-// 		score: number;
-// 		overview: string;
-// 		description: string;
-// 		considerations: string[];
-// 	};
-// 	marketFit: {
-// 		score: number;
-// 		overview: string;
-// 		description: string;
-// 		considerations: string[];
-// 	};
-// 	scalability: {
-// 		score: number;
-// 		overview: string;
-// 		description: string;
-// 		considerations: string[];
-// 	};
-// 	differentiation: {
-// 		score: number;
-// 		overview: string;
-// 		description: string;
-// 		considerations: string[];
-// 	};
-// 	roiPotential: {
-// 		score: number;
-// 		overview: string;
-// 		description: string;
-// 		considerations: string[];
-// 	};
-// }
+interface OverviewAnalysisProps {
+	feasibility: {
+		score: number;
+		overview: string;
+		description: string;
+		considerations: string[];
+	};
+	marketFit: {
+		score: number;
+		overview: string;
+		description: string;
+		considerations: string[];
+	};
+	scalability: {
+		score: number;
+		overview: string;
+		description: string;
+		considerations: string[];
+	};
+	differentiation: {
+		score: number;
+		overview: string;
+		description: string;
+		considerations: string[];
+	};
+	roiPotential: {
+		score: number;
+		overview: string;
+		description: string;
+		considerations: string[];
+	};
+}
 
 const OverviewAnalysis: React.FC<{ data: OverviewAnalysisProps }> = ({
 	data,

@@ -3,7 +3,7 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { prettyJSON } from "hono/pretty-json";
-import { geminiEvaluation, projectDetails } from "./routes/gemini";
+import {  projectDetails } from "./routes/gemini";
 import { base } from "./routes/route";
 
 const app = new Hono<{ Bindings: CloudflareBindings }>();

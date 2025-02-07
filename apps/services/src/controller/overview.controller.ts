@@ -1,31 +1,37 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { generationConfig, MODEL_TYPE } from "../lib/constant";
+interface ConsiderationSection {
+	score: number;
+	overview: string;
+	considerations: string[];
+}
 
-export async function searchController(c: any) {
+interface ProjectScore {
+	feasibility: ConsiderationSection;
+	marketfit: ConsiderationSection;
+	uniqueness: ConsiderationSection;
+	technical: ConsiderationSection;
+}
+interface ProjectSuggestion{
+    
+}
+export interface Overview {
+	score: ProjectScore;
+	suggestion: [];
+	missing: [];
+
+	indication: [];
+}
+export async function OverviewController(idea: string, c: any) {
 	const { GEMINI_API } = c.env;
-
-	const body = await c.req.json();
-	const { value, project, model } = body;
-
-	if (!value || !project || !model) {
-		return c.json({ status: "error", message: "Invalid input" }, 400);
-	}
-	console.log(await body, "BODY");
 
 	const genAI = new GoogleGenerativeAI(GEMINI_API);
 	const modelAI = genAI.getGenerativeModel({
 		model: MODEL_TYPE,
+		systemInstruction: "",
 	});
 
-	
-	//model instruction
-	//response type
-	//error type
-	//fn overview
-	//fn market
-	//fn features
-
-	const chatSession = modelAI.startChat({
+	const overviewSession = modelAI.startChat({
 		generationConfig,
 		history: [
 			{
@@ -65,116 +71,5 @@ export async function searchController(c: any) {
 				],
 			},
 		],
-	});
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	const result = await chatSession.sendMessage(value);
-	const textRes = result.response.text();
-	console.log(result.response);
-	const JsonRes = JSON.parse(textRes);
-
-	const { name, description, image } = getBriefDescription(value);
-	const overview= {
-        score:{},
-        about:{},
-        mvp:{},
-        competitors:{},
-        indication:{}
-
-    };
-    const market={
-        competitors:[],
-        audience:[],
-        reddit:[],
-        pain_points:[],
-        gaps:[],
-        trends:[]
-
-    }
-    const fetature={
-        mvp:[],
-        features:[]
-    }
-    
-	const resFormat = {
-		id: "12",
-		name: name,
-		description: description,
-		image: image,
-		timespan: new Date(),
-		overview: overview,
-        feature:fetature,
-        market:market,
-	};
-
-	return c.json(JSON.stringify(JsonRes), {
-		headers: {
-			"Content-Type": "application/json",
-			"Cache-Control": "max-age=3600",
-			"Access-Control-Allow-Origin": "http://localhost:5173",
-			"Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-			"Access-Control-Allow-Headers": "Content-Type",
-		},
 	});
 }
