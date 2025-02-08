@@ -3,6 +3,7 @@ import { Hono } from "hono";
 import { searchController } from "../controller/search.controller";
 import { buisness } from "./buisnessRoute";
 import { personal } from "./personalRoute";
+import { errorHandler } from "../error";
 
 export const base = new Hono();
 

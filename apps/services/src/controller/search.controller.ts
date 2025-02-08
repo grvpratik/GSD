@@ -8,6 +8,7 @@ import { ValidateIdeaController } from "./validate.controller";
 import { z } from "zod";
 import { InfoController } from "./info.controller";
 import { ContentfulStatusCode } from "hono/utils/http-status";
+import { ValidationError } from "../error";
 
 export const SearchRequestSchema = z.object({
 	value: z
@@ -57,6 +58,7 @@ class BusinessError extends Error {
 }
 
 export async function searchController(c: Context): Promise<Response> {
+	
 	try {
 		const body = await c.req.json();
 		const parsed = SearchRequestSchema.safeParse(body);

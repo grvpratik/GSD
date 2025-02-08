@@ -1,175 +1,146 @@
 import axios from "axios";
-import "dotenv/config";
 
 interface SearchPostsParams {
-  query: string;
-  subreddit?: string;
-  sort?: 'relevance' | 'hot' | 'top' | 'new' | 'comments';
-  time?: 'hour' | 'day' | 'week' | 'month' | 'year' | 'all';
-  limit?: number;
+	accessToken: string;
+	query: string;
+	subreddit?: string;
+	sort?: "relevance" | "hot" | "top" | "new" | "comments";
+	time?: "hour" | "day" | "week" | "month" | "year" | "all";
+	limit?: number;
 }
 
 interface RedditPost {
-  title: string;
-  author: string;
-  subreddit: string;
-  score: number;
-  upvote_ratio: number;
-  num_comments: number;
-  created_utc: number;
-  url: string;
-  is_self: boolean;
-  selftext: string;
-  link_url: string;
-  is_video: boolean;
-  media: any;
-  thumbnail: string;
-  awards: number;
-  post_hint?: string;
-  distinguished: string | null;
-  stickied: boolean;
-  locked: boolean;
-  over_18: boolean;
+	title: string;
+	author: string;
+	subreddit: string;
+	score: number;
+	upvote_ratio: number;
+	num_comments: number;
+	created_utc: number;
+	url: string;
+	is_self: boolean;
+	selftext: string;
+	link_url: string;
+	is_video: boolean;
+	media: any;
+	thumbnail: string;
+	awards: number;
+	post_hint?: string;
+	distinguished: string | null;
+	stickied: boolean;
+	locked: boolean;
+	over_18: boolean;
 }
 
 interface Subreddit {
-  name: string;
-  subscribers: number;
-  description: string;
+	name: string;
+	subscribers: number;
+	description: string;
 }
+export async function generateRedditToken(c: any) {
+	const { REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET } = c.env;
+	const clientId = REDDIT_CLIENT_ID;
+	const clientSecret = REDDIT_CLIENT_SECRET;
+	const tokenResponse = await axios.post(
+		"https://www.reddit.com/api/v1/access_token",
+		new URLSearchParams({
+			grant_type: "client_credentials",
+		}),
+		{
+			auth: {
+				username: clientId!,
+				password: clientSecret!,
+			},
+			headers: {
+				"User-Agent": "app/1.0",
+			},
+		}
+	);
 
-export async function searchSubreddits(query: string): Promise<Subreddit[]> {
-  const clientId = process.env.REDDIT_CLIENT_ID;
-  const clientSecret = process.env.REDDIT_CLIENT_SECRET;
+	const accessToken = tokenResponse.data.access_token;
+	return accessToken;
+}
+export async function searchSubreddits(
+	query: string,
+	c: any
+): Promise<Subreddit[]> {
+	const { REDDIT_ACCESS_TOKEN } = c.env;
 
-  const tokenResponse = await axios.post(
-    "https://www.reddit.com/api/v1/access_token",
-    new URLSearchParams({
-      grant_type: "client_credentials",
-    }),
-    {
-      auth: {
-        username: clientId!,
-        password: clientSecret!,
-      },
-      headers: {
-        "User-Agent": "app/1.0",
-      },
-    }
-  );
+	const accessToken = REDDIT_ACCESS_TOKEN;
 
-  const accessToken = tokenResponse.data.access_token;
-  const searchResponse = await axios.get(
-    "https://oauth.reddit.com/subreddits/search",
-    {
-      params: {
-        q: query,
-        limit: 10,
-      },
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "User-Agent": "app/1.0",
-      },
-    }
-  );
+	const searchResponse = await axios.get(
+		"https://oauth.reddit.com/subreddits/search",
+		{
+			params: {
+				q: query,
+				limit: 10,
+			},
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+				"User-Agent": "app/1.0",
+			},
+		}
+	);
 
-  return searchResponse.data.data.children.map((sub: any) => ({
-    name: sub.data.display_name,
-    subscribers: sub.data.subscribers,
-    description: sub.data.public_description,
-  }));
+	return searchResponse.data.data.children.map((sub: any) => ({
+		name: sub.data.display_name,
+		subscribers: sub.data.subscribers,
+		description: sub.data.public_description,
+	}));
 }
 
 export async function searchRedditPosts({
-  query,
-  subreddit = "",
-  sort = "relevance",
-  time = "all",
-  limit = 25,
+	accessToken,
+	query,
+	subreddit = "",
+	sort = "relevance",
+	time = "all",
+	limit = 25,
 }: SearchPostsParams): Promise<RedditPost[]> {
-  const clientId = process.env.REDDIT_CLIENT_ID;
-  const clientSecret = process.env.REDDIT_CLIENT_SECRET;
-  console.log(clientId);
-  const tokenResponse = await axios.post(
-    "https://www.reddit.com/api/v1/access_token",
-    new URLSearchParams({
-      grant_type: "client_credentials",
-    }),
-    {
-      auth: {
-        username: clientId,
-        password: clientSecret,
-      },
-      headers: {
-        "User-Agent": "app/1.0",
-      },
-    }
-  );
+	// Build search URL
+	let searchUrl = "https://oauth.reddit.com/search";
+	if (subreddit) {
+		searchUrl = `https://oauth.reddit.com/r/${subreddit}/search`;
+	}
 
-  // Build search URL
-  let searchUrl = "https://oauth.reddit.com/search";
-  if (subreddit) {
-    searchUrl = `https://oauth.reddit.com/r/${subreddit}/search`;
-  }
-  const accessToken = tokenResponse.data.access_token;
-  // Search posts
-  const searchResponse = await axios.get(searchUrl, {
-    params: {
-      q: query,
-      sort,
-      t: time,
-      limit,
-      restrict_sr: !!subreddit, // Restrict to subreddit if specified
-      type: "link", // Search for posts
-    },
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      "User-Agent": "YourAppName/1.0",
-    },
-  });
+	// Search posts
+	const searchResponse = await axios.get(searchUrl, {
+		params: {
+			q: query,
+			sort,
+			t: time,
+			limit,
+			restrict_sr: !!subreddit, // Restrict to subreddit if specified
+			type: "link", // Search for posts
+		},
+		headers: {
+			Authorization: `Bearer ${accessToken}`,
+			"User-Agent": "YourAppName/1.0",
+		},
+	});
 
-  // Process and return post results
-  return searchResponse.data.data.children.map((post) => ({
-    title: post.data.title,
-    author: post.data.author,
-    subreddit: post.data.subreddit,
-    score: post.data.score,
-    upvote_ratio: post.data.upvote_ratio,
-    num_comments: post.data.num_comments,
-    created_utc: post.data.created_utc,
-    url: `https://reddit.com${post.data.permalink}`,
-    is_self: post.data.is_self,
-    selftext: post.data.selftext,
-    link_url: post.data.url,
-    is_video: post.data.is_video,
-    media: post.data.media,
-    thumbnail: post.data.thumbnail,
-    awards: post.data.all_awardings?.length || 0,
-    post_hint: post.data.post_hint,
-    distinguished: post.data.distinguished,
-    stickied: post.data.stickied,
-    locked: post.data.locked,
-    over_18: post.data.over_18,
-  }));
+	// Process and return post results
+	return searchResponse.data.data.children.map((post:any) => ({
+		title: post.data.title,
+		author: post.data.author,
+		subreddit: post.data.subreddit,
+		score: post.data.score,
+		upvote_ratio: post.data.upvote_ratio,
+		num_comments: post.data.num_comments,
+		created_utc: post.data.created_utc,
+		url: `https://reddit.com${post.data.permalink}`,
+		is_self: post.data.is_self,
+		selftext: post.data.selftext,
+		link_url: post.data.url,
+		is_video: post.data.is_video,
+		media: post.data.media,
+		thumbnail: post.data.thumbnail,
+		awards: post.data.all_awardings?.length || 0,
+		post_hint: post.data.post_hint,
+		distinguished: post.data.distinguished,
+		stickied: post.data.stickied,
+		locked: post.data.locked,
+		over_18: post.data.over_18,
+	}));
 }
 
-// Usage examples:
-// Search all of Reddit
-searchRedditPosts({
-  query: "javascript tutorial",
-  sort: "top",
-  time: "month",
-  limit: 5,
-}).then((posts) => console.log(posts));
-
-// Search within specific subreddit
-// searchRedditPosts({
-//  query: "beginner",
-//  subreddit: "javascript",
-//  sort: "new",
-//  limit: 25,
-// }).then((posts) => console.log(posts));
-// Usage
-// searchSubreddits('technology')
-//   .then(subreddits => console.log(subreddits))
-//   .catch(error => console.error('Error:', error));

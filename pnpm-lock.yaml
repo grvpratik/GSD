@@ -20,6 +20,9 @@ importers:
       '@google/generative-ai':
         specifier: ^0.21.0
         version: 0.21.0
+      axios:
+        specifier: ^1.7.9
+        version: 1.7.9
       hono:
         specifier: ^4.6.16
         version: 4.6.16

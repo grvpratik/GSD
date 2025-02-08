@@ -6,3 +6,5 @@ export const generationConfig = {
 	responseMimeType: "application/json",
 };
 export const MODEL_TYPE = "gemini-2.0-pro-exp-02-05";
+
+export const NODE_ENV:string = "develpment";

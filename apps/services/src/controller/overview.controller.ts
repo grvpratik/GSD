@@ -61,7 +61,6 @@ export async function OverviewController(idea: string, c: any) {
 		generationConfig,
 	});
 
-	// Example conversation history
 	const history = [
 		{
 			role: "user",
