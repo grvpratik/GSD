@@ -51,6 +51,7 @@ ${JSON.stringify(OverviewSchema.shape)}
 
 // === Core Function ===
 export async function OverviewController(idea: string, c: any) {
+	
 	const { GEMINI_API } = c.env;
 	const genAI = new GoogleGenerativeAI(GEMINI_API);
 

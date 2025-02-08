@@ -78,13 +78,13 @@ export default function AiSearch() {
 				project: state.selectedProject,
 				model: state.selectedModel,
 			});
-			if(response.status!==200){
+			if (response.status !== 200) {
 				handleError(response && response.data.message);
 				return;
 			}
 			const result = response.data;
 
-			await router.push(`/build/${result.id}`);
+			router.push(`/build/${result.id}`);
 		} catch (error) {
 			handleError(error);
 		} finally {

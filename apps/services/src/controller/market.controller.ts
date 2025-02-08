@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { generationConfig, MODEL_TYPE } from "../lib/constant";
 
 // === Zod Schemas ===
 const CompetitorSchema = z.object({
@@ -48,16 +49,16 @@ const MarketTrendsSchema = z.object({
 	regulatory_factors: z.array(z.string()),
 });
 
-const SocialListeningSchema = z.object({
-	reddit: z.object({
-		popular_threads: z.array(z.string()),
-		common_complaints: z.array(z.string()),
-	}),
-	google_trends: z.object({
-		interest_over_time: z.record(z.number()),
-		related_queries: z.array(z.string()),
-	}),
-});
+// const SocialListeningSchema = z.object({
+// 	reddit: z.object({
+// 		popular_threads: z.array(z.string()),
+// 		common_complaints: z.array(z.string()),
+// 	}),
+// 	google_trends: z.object({
+// 		interest_over_time: z.record(z.number()),
+// 		related_queries: z.array(z.string()),
+// 	}),
+// });
 
 const MarketSchema = z.object({
 	competitors: z.array(CompetitorSchema),
@@ -65,7 +66,7 @@ const MarketSchema = z.object({
 	pain_points: z.array(z.string()),
 	gaps: z.array(z.string()),
 	trends: MarketTrendsSchema,
-	social_listening: SocialListeningSchema,
+	// social_listening: SocialListeningSchema,
 });
 
 // === System Instruction ===
@@ -75,19 +76,20 @@ Act as a market analysis expert. Analyze the market for the given idea and gener
 1. Identify direct and indirect competitors
 2. Analyze audience demographics and behavior
 3. Highlight market gaps and pain points
-4. Include social listening data from Reddit and Google Trends
-5. Maintain numeric consistency for percentages and ratios
-6. Validate URLs and image links
+4. Maintain numeric consistency for percentages and ratios
+5. Validate URLs and image links
 
 Return valid JSON matching this schema:
 ${JSON.stringify(MarketSchema.shape)}
 `;
 
-export async function MarketController(idea: string, env: any) {
-	const genAI = new GoogleGenerativeAI(env.GEMINI_API);
+export async function MarketController(idea: string, c: any) {
+	const{GEMINI_API}=c.env
+	const genAI = new GoogleGenerativeAI(GEMINI_API);
 	const model = genAI.getGenerativeModel({
-		model: "gemini-pro",
+		model: MODEL_TYPE,
 		systemInstruction: SYSTEM_PROMPT,
+		generationConfig
 	});
 
 	// Example conversation history
@@ -149,19 +151,7 @@ export async function MarketController(idea: string, env: any) {
 								"GDPR compliance",
 							],
 						},
-						social_listening: {
-							reddit: {
-								popular_threads: ["Meal prep tips", "Budget eating"],
-								common_complaints: [
-									"App subscription costs",
-									"Limited recipes",
-								],
-							},
-							google_trends: {
-								interest_over_time: { "2023-01": 65, "2023-06": 82 },
-								related_queries: ["healthy recipes", "meal planning template"],
-							},
-						},
+						
 					}),
 				},
 			],
@@ -186,3 +176,17 @@ export async function MarketController(idea: string, env: any) {
 type Competitors = z.infer<typeof CompetitorSchema>;
 type Audience = z.infer<typeof AudienceSchema>;
 type Market = z.infer<typeof MarketSchema>;
+
+//social_listening: {
+						// 	reddit: {
+						// 		popular_threads: ["Meal prep tips", "Budget eating"],
+						// 		common_complaints: [
+						// 			"App subscription costs",
+						// 			"Limited recipes",
+						// 		],
+						// 	},
+						// 	google_trends: {
+						// 		interest_over_time: { "2023-01": 65, "2023-06": 82 },
+						// 		related_queries: ["healthy recipes", "meal planning template"],
+						// 	},
+						// },
