@@ -16,34 +16,39 @@ import { Button } from "www/components/ui/button";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useToast } from "www/hooks/use-toast";
-import { MIN_HEIGHT, MAX_HEIGHT, PROJECT_TYPE, AI_MODELS_LIST } from "www/lib/constant";
+import {
+	MIN_HEIGHT,
+	MAX_HEIGHT,
+	PROJECT_TYPE,
+	AI_MODELS_LIST,
+} from "www/lib/constant";
 
-
-
-const AI_MODELS = AI_MODELS_LIST.map((model) => ({ ...model, icon: <Brain className="w-4 h-4" /> }));
+const AI_MODELS = AI_MODELS_LIST.map((model) => ({
+	...model,
+	icon: <Brain className="w-4 h-4" />,
+}));
 interface StateProps {
 	value: string;
-	selectedAgent: string;
+	selectedProject: string;
 	selectedModel: string;
 	isAgentMenuOpen: boolean;
 	isModelMenuOpen: boolean;
 }
 
 interface SearchInput {
-  value: string;
-  agent: string;
-  model: string;
+	value: string;
+	project: string;
+	model: string;
 }
 
 const searchService = {
-	
-  async submit(input: SearchInput) {
-    return axios.post(`${process.env.NEXT_PUBLIC_API}/search`, input, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-  }
+	async submit(input: SearchInput) {
+		return axios.post(`${process.env.NEXT_PUBLIC_API!}/search`, input, {
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+	},
 };
 
 export default function AiSearch() {
@@ -51,7 +56,7 @@ export default function AiSearch() {
 	const [loading, setLoading] = useState<boolean>(false);
 	const [state, setState] = useState<StateProps>({
 		value: "",
-		selectedAgent: PROJECT_TYPE[0].name,
+		selectedProject: PROJECT_TYPE[0].name,
 		selectedModel: AI_MODELS[0].name,
 		isAgentMenuOpen: false,
 		isModelMenuOpen: false,
@@ -64,19 +69,22 @@ export default function AiSearch() {
 	const router = useRouter();
 	const handleSubmit = async () => {
 		if (!isValidInput(state)) return;
-		
+
 		setLoading(true);
-		
+
 		try {
 			const response = await searchService.submit({
 				value: state.value,
-				agent: state.selectedAgent,
+				project: state.selectedProject,
 				model: state.selectedModel,
 			});
-		
+			if(response.status!==200){
+				handleError(response && response.data.message);
+				return;
+			}
 			const result = response.data;
+
 			await router.push(`/build/${result.id}`);
-			
 		} catch (error) {
 			handleError(error);
 		} finally {
@@ -96,9 +104,10 @@ export default function AiSearch() {
 		}
 		return true;
 	};
-	
+
 	const handleError = (error: unknown) => {
-		const message = error instanceof Error ? error.message : "Internal Server Error";
+		const message =
+			error instanceof Error ? error.message : "Internal Server Error";
 		toast({
 			variant: "destructive",
 			title: "Error occurred",
@@ -168,7 +177,7 @@ export default function AiSearch() {
 									</button>
 
 									<div className="absolute -bottom-8 left-0 text-nowrap flex items-center gap-1.5 text-[10px] text-muted-foreground dark:text-white/50">
-										<span>{state.selectedAgent}</span>
+										<span>{state.selectedProject}</span>
 									</div>
 
 									{state.isAgentMenuOpen && (
@@ -182,7 +191,7 @@ export default function AiSearch() {
 													type="button"
 													onClick={() => {
 														updateState({
-															selectedAgent: agent.name,
+															selectedProject: agent.name,
 															isAgentMenuOpen: false,
 														});
 													}}

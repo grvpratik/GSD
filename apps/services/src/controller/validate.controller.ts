@@ -40,6 +40,7 @@ Rate confidence between 0-1, where:
 // === Core Function ===
 export async function ValidateIdeaController(idea: string, c: any) {
 	const { GEMINI_API } = c.env;
+	console.log(GEMINI_API)
 	const genAI = new GoogleGenerativeAI(GEMINI_API);
 
 	const model = genAI.getGenerativeModel({
@@ -144,7 +145,7 @@ export async function ValidateIdeaController(idea: string, c: any) {
 		// Validate and parse response
 		const rawData = JSON.parse(response);
 		const validated = IdeaValidationSchema.parse(rawData);
-
+console.log(validated)
 		return validated;
 	} catch (error) {
 		console.error("Idea Validation Error:", error);

@@ -83,7 +83,7 @@ Return valid JSON matching this schema:
 ${JSON.stringify(MarketSchema.shape)}
 `;
 
-async function MarketController(idea: string, env: any) {
+export async function MarketController(idea: string, env: any) {
 	const genAI = new GoogleGenerativeAI(env.GEMINI_API);
 	const model = genAI.getGenerativeModel({
 		model: "gemini-pro",
